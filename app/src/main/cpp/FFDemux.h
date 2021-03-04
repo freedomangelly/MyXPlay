@@ -6,6 +6,7 @@
 #define MYXPLAY_FFDEMUX_H
 
 #include "IDemux.h"
+#include <mutex>
 struct AVFormatContext;
 
 class FFDemux :public IDemux{
@@ -14,6 +15,7 @@ public:
 virtual bool Open(const char *url) = 0;
     //读取一帧数据，数据由调用者清理，这块空间是需要清理的
 virtual XData Read() = 0;
+    FFDemux();
 
 private:
     AVFormatContext *ic = 0;
