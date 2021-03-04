@@ -19,6 +19,8 @@ bool FFDemux::Open(const char* url){
         LOGE("FFDemux open file %s ",url);
         return false;
     }
+    this->totalMs=ic->duration/(AV_TIME_BASE/1000);
+    LOGI("total ms = %d!",totalMs);
 
     return true;
 }
