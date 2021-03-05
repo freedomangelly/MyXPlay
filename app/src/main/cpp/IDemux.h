@@ -6,19 +6,30 @@
 #define MYXPLAY_IDEMUX_H
 
 #include "XData.h"
+#include "XThread.h"
+#include "IObserver.h"
 
-
-class IDemux {
-    //打开文件或者流媒体
-virtual bool Open(const char *url) = 0;
-    //读取一帧数据，数据由调用者清理，这块空间是需要清理的
-virtual XData Read() = 0;
-
+class IDemux: public IObserver {
 public:
-//总时长
-int totalMs=0;
-};
+    //打开文件，或者流媒体 rmtp http rtsp
+    virtual bool Open(const char *url) = 0;
+    //seek 位置 pos 0.0~1.0
+    virtual bool Seek(double pos) = 0;
+    virtual void Close() = 0;
+//    //获取视频参数
+//    virtual XParameter GetVPara() = 0;
+//
+//    //获取音频参数
+//    virtual XParameter GetAPara() = 0;
 
+    //读取一帧数据，数据由调用者清理
+    virtual XData Read() = 0;
+
+    //总时长（毫秒）
+    int totalMs = 0;
+protected:
+    virtual void Main();
+};
 
 
 #endif //MYXPLAY_IDEMUX_H
