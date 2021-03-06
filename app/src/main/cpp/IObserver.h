@@ -11,14 +11,14 @@
 #include <vector>
 #include <mutex>
 class IObserver :public XThread{
-
+public:
     //观察者主体部分的函数
     virtual void Update(XData data){};
 
     //主体函数,添加观察者
     void AddObs(IObserver *obs);
 
-public:
+
     void Notify(XData data);
 
 protected:

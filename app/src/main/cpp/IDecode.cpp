@@ -6,7 +6,7 @@
 //由主体notify的数据
 void IDecode::Update(XData pkt)
 {
-    if(pkt.isAudio != isAudio)
+    if(pkt.isAudio != isAudio)//是音频就不要处理
     {
         return;
     }

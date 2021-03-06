@@ -24,6 +24,52 @@ bool FFDemux::Open(const char* url){
 
     return true;
 }
+//获取视频参数
+XParameter FFDemux::GetVPara()
+{
+    mux.lock();
+    if (!ic) {
+        mux.unlock();
+        LOGI("GetVPara failed! ic is NULL！");
+        return XParameter();
+    }
+    //获取了视频流索引
+    int re = av_find_best_stream(ic, AVMEDIA_TYPE_VIDEO, -1, -1, 0, 0);
+    if (re < 0) {
+        mux.unlock();
+        LOGI("av_find_best_stream failed!");
+        return XParameter();
+    }
+    videoStream = re;
+    XParameter para;
+    para.para = ic->streams[re]->codecpar;
+    mux.unlock();
+    return para;
+}
+//获取音频参数
+XParameter FFDemux::GetAPara()
+{
+    mux.lock();
+    if (!ic) {
+        mux.unlock();
+        LOGI("GetVPara failed! ic is NULL！");
+        return XParameter();
+    }
+    //获取了音频流索引
+    int re = av_find_best_stream(ic, AVMEDIA_TYPE_AUDIO, -1, -1, 0, 0);
+    if (re < 0) {
+        mux.unlock();
+        LOGI("av_find_best_stream failed!");
+        return XParameter();
+    }
+    audioStream = re;
+    XParameter para;
+    para.para = ic->streams[re]->codecpar;
+    para.channels = ic->streams[re]->codecpar->channels;
+    para.sample_rate = ic->streams[re]->codecpar->sample_rate;
+    mux.unlock();
+    return para;
+}
 
 XData FFDemux::Read(){
     if(!ic)return XData();
